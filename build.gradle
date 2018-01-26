@@ -102,7 +102,7 @@ configure(coreModule) {
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
         appName = "${modulePrefix}-core"
-        appJars("${modulePrefix}-global", "${modulePrefix}-core")
+        appJars("${modulePrefix}-global", "${modulePrefix}-core", "javamelody-core")
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
@@ -180,7 +180,7 @@ configure(webModule) {
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
         appName = "${modulePrefix}"
-        appJars("${modulePrefix}-global", "${modulePrefix}-gui", "${modulePrefix}-web")
+        appJars("${modulePrefix}-global", "${modulePrefix}-gui", "${modulePrefix}-web", "javamelody-core")
     }
 }
 
