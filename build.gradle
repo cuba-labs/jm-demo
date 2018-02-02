@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.8-SNAPSHOT'
+    ext.cubaVersion = '6.8.0'
     repositories {
         
         mavenLocal()
@@ -43,7 +43,7 @@ cuba {
 }
 
 dependencies {
-    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.1-SNAPSHOT")
+    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.1.0-SNAPSHOT")
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
