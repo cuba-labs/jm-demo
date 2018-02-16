@@ -1,8 +1,7 @@
 
 buildscript {
-    ext.cubaVersion = '6.8.0'
+    ext.cubaVersion = '6.8.1'
     repositories {
-        
         mavenLocal()
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
@@ -11,7 +10,6 @@ buildscript {
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
-        
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -26,7 +24,6 @@ def guiModule = project(":${modulePrefix}-gui")
 def webModule = project(":${modulePrefix}-web")
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
-
 
 apply(plugin: 'idea')
 apply(plugin: 'cuba')
@@ -43,7 +40,7 @@ cuba {
 }
 
 dependencies {
-    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.1.0-SNAPSHOT")
+    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.2.0")
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
@@ -70,12 +67,9 @@ configure([globalModule, coreModule, guiModule, webModule]) {
 
 configure(globalModule) {
     task enhance(type: CubaEnhancing)
-
-    
 }
 
 configure(coreModule) {
-
     configurations {
         jdbc
         dbscripts
@@ -102,7 +96,7 @@ configure(coreModule) {
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
         appName = "${modulePrefix}-core"
-        appJars("${modulePrefix}-global", "${modulePrefix}-core", "javamelody-core")
+        appJars("${modulePrefix}-global", "${modulePrefix}-core")
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
@@ -125,7 +119,6 @@ configure(coreModule) {
 configure(guiModule) {
     dependencies {
         compile(globalModule)
-
     }
 
     task deployConf(type: Copy) {
@@ -143,7 +136,6 @@ configure(webModule) {
     dependencies {
         provided(servletApi)
         compile(guiModule)
-
     }
     
     task webArchive(type: Zip) {
@@ -180,13 +172,9 @@ configure(webModule) {
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
         appName = "${modulePrefix}"
-        appJars("${modulePrefix}-global", "${modulePrefix}-gui", "${modulePrefix}-web", "javamelody-core")
+        appJars("${modulePrefix}-global", "${modulePrefix}-gui", "${modulePrefix}-web")
     }
 }
-
-
-
-
 
 task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/shared")

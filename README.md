@@ -1,8 +1,24 @@
-# jm-demo
-An application that uses `jm-compnent` CUBA app component to use JavaMelody monitoring in CUBA-based applications.
+# CUBA JavaMelody monitoring integration demo
 
-## Monitoring
-To open monitoring dashboard open the following URL: `http://localhost:8080/app/monitoring` (Web) or
-`http://localhost:8080/app-core/monitoring` (Core).
+## Abstract
+It is a demo application that uses [cuba-jm](https://github.com/cuba-platform/cuba-jm)
+application component to enable JavaMelody monitoring.
 
-Auth credentials: `admin/admin`.
+## Settings used
+
+We configured JavaMelody monitoring settings in this project in the following way:
+1. `cubajm.monitoringUrl`: `/cm/` for the middleware tier and `/wm/`
+for the web client
+2. `cubajm.authorizedUserLogin` & `cubajm.authorizedUserPassword` are
+`demo`, `demo` for both tiers
+
+You can change these settings in `app.properties` & `web-app.properties`
+files.
+
+## Usage
+
+To open monitoring dashboards use the following URLs:
+1. [http://localhost:8080/app-core/cm/](http://localhost:8080/app-core/cm/) -
+monitoring dashboard for the middleware tier
+2. [http://localhost:8080/app/wm/](http://localhost:8080/app/wm/) -
+monitoring dashboard for the web client
