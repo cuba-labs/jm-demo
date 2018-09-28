@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2016 Haulmont Technology Ltd. All Rights Reserved.
   ~ Haulmont Technology proprietary and confidential.
@@ -12,8 +12,10 @@
     <context-param>
         <description>List of app properties files for Web Client</description>
         <param-name>appPropertiesConfigWeb</param-name>
-        <param-value>classpath:com/company/jmdemo/web-app.properties
-            /WEB-INF/local.app.properties</param-value>
+        <param-value>
+            classpath:com/company/jmdemo/web-app.properties
+            /WEB-INF/local.app.properties
+        </param-value>
     </context-param>
     <context-param>
         <description>Web resources version for correct caching in browser</description>
@@ -24,8 +26,10 @@
     <context-param>
         <description>List of app properties files for Middleware</description>
         <param-name>appPropertiesConfigCore</param-name>
-        <param-value>classpath:com/company/jmdemo/app.properties
-            /WEB-INF/local.app.properties</param-value>
+        <param-value>
+            classpath:com/company/jmdemo/app.properties
+            /WEB-INF/local.app.properties
+        </param-value>
     </context-param>
     <!--Application components-->
     <context-param>

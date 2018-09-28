@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.9.0'
+    ext.cubaVersion = '6.10.0'
     repositories {
         mavenLocal()
         maven {
@@ -37,10 +37,13 @@ cuba {
     tomcat {
         dir = "$project.rootDir/deploy/tomcat"
     }
+    ide {
+        vcs = 'Git'
+    }
 }
 
 dependencies {
-    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.3.0")
+    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.4.0")
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
@@ -66,7 +69,9 @@ configure([globalModule, coreModule, guiModule, webModule]) {
 }
 
 configure(globalModule) {
-    task enhance(type: CubaEnhancing)
+    entitiesEnhancing {
+        main { enabled = true }
+    }
 }
 
 configure(coreModule) {
@@ -197,19 +202,35 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.3.1'
 }
 
-apply from: 'extra.gradle'
-
-task buildWar(type: CubaWarBuilding) {
-    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
+task buildSingleWar(type: CubaWarBuilding) {
+    logbackConfigurationFile = 'etc/war-logback.xml'
     coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
+    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     appProperties = ['cuba.automaticDatabaseUpdate' : true]
     includeContextXml = true
     includeJdbcDriver = true
     appHome = 'app_home'
 }
 
+task buildWar(type: CubaWarBuilding) {
+    logbackConfigurationFile = 'etc/war-logback.xml'
+    coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate' : true]
+    singleWar = false
+    includeContextXml = true
+    includeJdbcDriver = true
+    appHome = 'app_home'
+}
+
+task buildSingleUberJar(type: CubaUberJarBuilding) {
+    singleJar = true
+    logbackConfigurationFile = 'etc/uber-jar-logback.xml'
+    coreJettyEnvPath = 'modules/core/web/META-INF/jetty-env.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate' : true]
+}
+
 task buildUberJar(type: CubaUberJarBuilding) {
-    logbackConfigurationFile = 'etc/logback.xml'
+    logbackConfigurationFile = 'etc/uber-jar-logback.xml'
     coreJettyEnvPath = 'modules/core/web/META-INF/jetty-env.xml'
     appProperties = ['cuba.automaticDatabaseUpdate' : true]
 }
