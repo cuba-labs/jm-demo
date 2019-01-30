@@ -1,15 +1,9 @@
 
 buildscript {
-    ext.cubaVersion = '6.10.0'
+    ext.cubaVersion = '7.0.0'
     repositories {
-        mavenLocal()
-        maven {
-            url 'https://repo.cuba-platform.com/content/groups/work'
-            credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
-            }
-        }
+        jcenter()
+        maven { url "https://dl.bintray.com/cuba-platform/main" }
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -25,7 +19,6 @@ def webModule = project(":${modulePrefix}-web")
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
-apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 cuba {
@@ -43,7 +36,7 @@ cuba {
 }
 
 dependencies {
-    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.4.0")
+    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.5.1")
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
@@ -51,7 +44,6 @@ def hsql = 'org.hsqldb:hsqldb:2.2.9'
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'idea')
     apply(plugin: 'cuba')
 
     dependencies {
@@ -69,6 +61,12 @@ configure([globalModule, coreModule, guiModule, webModule]) {
 }
 
 configure(globalModule) {
+    dependencies {
+        if (!JavaVersion.current().isJava8()) {
+            runtime('javax.xml.bind:jaxb-api:2.3.1')
+            runtime('org.glassfish.jaxb:jaxb-runtime:2.3.1')
+        }
+    }
     entitiesEnhancing {
         main { enabled = true }
     }
@@ -82,7 +80,7 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        provided(servletApi)
+        compileOnly(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
 
@@ -139,7 +137,7 @@ configure(webModule) {
     }
 
     dependencies {
-        provided(servletApi)
+        compileOnly(servletApi)
         compile(guiModule)
     }
     
@@ -198,9 +196,6 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
-}
 
 task buildSingleWar(type: CubaWarBuilding) {
     logbackConfigurationFile = 'etc/war-logback.xml'
