@@ -1,7 +1,8 @@
 
 buildscript {
-    ext.cubaVersion = '7.0.0'
+    ext.cubaVersion = '7.1.0'
     repositories {
+        mavenLocal()
         jcenter()
         maven { url "https://dl.bintray.com/cuba-platform/main" }
     }
@@ -36,10 +37,10 @@ cuba {
 }
 
 dependencies {
-    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.5.1")
+    appComponent("com.haulmont.addon.cubajm:cuba-jm-global:0.6.0")
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.2.9'
+def hsql = 'org.hsqldb:hsqldb:2.4.1'
 
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
